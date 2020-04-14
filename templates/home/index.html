@@ -1,0 +1,36 @@
+{% extends 'home/layouts/app.html' %}
+{% load static %}
+
+{% block banner %}
+    {% include 'home/layouts/banner.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col col-md-11 mt-5 ml-5">
+        <h1 class="text-center">New Books</h1>
+        <hr>
+        <div class="row justify-content-center">
+            {% for book in newBooks %}
+                {% include 'home/partials/block-book.html' %}
+            {% endfor %}
+        </div>
+        <div class="col col-11 mt-3 text-center">
+            <button type="button" class="btn btn-outline-success">See more</button>
+        </div>
+    </div>
+
+     <div class="col col-md-11 mt-5 ml-5">
+        <h1 class="text-center">All Books</h1>
+         <hr>
+        <div class="row justify-content-center">
+            {% for book in books %}
+            {% include 'home/partials/block-book.html' %}
+            {% endfor %}
+        </div>
+         <div class="col col-11 mt-3 text-center">
+            <button type="button" class="btn btn-outline-success">See more</button>
+        </div>
+    </div>
+
+
+{% endblock %}

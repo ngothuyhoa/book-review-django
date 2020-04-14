@@ -1,0 +1,14 @@
+{% load static %}
+<div class="col col-md-3">
+    <div class="card">
+        <img class="card-img-top img-thumbnail" src=" /{{ book.image }} " alt="Card image" style="height: 250px">
+        <div class="card-body">
+             <a href="{% url 'book:detail' book.id %}"><h6 class="card-title">{{ book.title }}</h6></a>
+            <hr>
+            <small>{{ book.publish_date|date:'Y-m-d'}}</small>
+            | <i class="fas fa-heart"></i>
+            | <i class="fas fa-comment day"></i>
+            <small> 10</small>
+        </div>
+    </div>
+</div>

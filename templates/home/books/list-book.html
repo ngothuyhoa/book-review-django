@@ -1,0 +1,15 @@
+{% extends 'home/layouts/app.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col col-md-11 mt-5 ml-5">
+    <h1 class="text-center">{{ title }} Books</h1>
+    <hr>
+    <div class="row justify-content-center">
+        {% for book in books %}
+            {% include 'home/partials/block-book.html' %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
