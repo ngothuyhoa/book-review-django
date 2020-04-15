@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import View, ListView
 from book.models import Book, Category
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 class HomeView(View):
@@ -9,7 +11,8 @@ class HomeView(View):
         return render(request, 'home/index.html')
 
 
-class IndexView(ListView):
+class IndexView(LoginRequiredMixin, ListView):
+    login_url = '/login'
     template_name = "home/index.html"
     queryset = ''
 

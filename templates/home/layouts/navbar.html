@@ -22,7 +22,9 @@
     <div class="col col-md-4">
         <form class="form-inline" method="get" action="{% url 'book:search' %}">
             <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search">
-            <button class="btn btn-success" type="submit">Search</button>
+            <button class="btn btn-warning" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
         </form>
     </div>
 </nav>

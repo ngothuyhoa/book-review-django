@@ -3,10 +3,12 @@ from django.views.generic import ListView, DetailView
 from book.models import Book, Category
 from django.http import HttpResponse
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
-class BaseListBookView(ListView):
+class BaseListBookView(LoginRequiredMixin, ListView):
+    login_url = '/login'
     template_name = "home/books/list-book.html"
     queryset = ''
 
