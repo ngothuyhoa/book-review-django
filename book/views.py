@@ -24,29 +24,18 @@ class BookListView(BaseListBookView):
         return context
 
 
-# class NewBookListView(BaseListBookView, TemplateView):
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['books'] = Category.objects.get(pk=1).book_set.all()
-#
-#         return context
+class BookListByCategoryView(BaseListBookView):
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(pk=self.kwargs['pk'])
+        context['books'] = category.book_set.all()
+        context['title'] = category.title
 
-def categoryBook(request, category_id):
-    template = 'home/books/list-book.html'
-    category = Category.objects.get(pk=category_id)
-    books = category.book_set.all()
-    categories = Category.objects.all()
-    content = {
-        'books': books,
-        'categories': categories,
-        'title': Category.objects.get(pk=category_id).title
-    }
-    return render(request, template, content)
+        return context
+
 
 class SearchListView(BaseListBookView):
-
     def get_context_data(self, **kwargs):
         search = self.request.GET.get('search')
         context = super().get_context_data(**kwargs)
@@ -56,11 +45,7 @@ class SearchListView(BaseListBookView):
         context['title'] = 'Result search: "' + search + '"'
         return context
 
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'home/books/detail-book.html'
-
-
-def detailBook(request):
-    template =  'home/books/detail-book.html'
-    return render(request, template)
