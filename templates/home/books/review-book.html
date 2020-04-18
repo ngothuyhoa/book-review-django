@@ -1,0 +1,65 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<div class="card mt-5">
+    <div class="card-body">
+        <h2>Review Book</h2>
+        <hr>
+        <div class="list-review">
+            {% for review in book.reviews.all %}
+            <h6><strong>{{ review.user }}</strong></h6>
+            {{ review.description }}
+            <br>
+            <span>
+                <small>{{ review.created_at }}</small>
+                <small>
+                    |
+                    <button
+                        type="button"
+                        class="btn btn-light btn-sm text-success btn-reply"
+                        id="btn-reply-{{review.id}}"
+                    >
+                        Reply
+                    </button>
+                </small>
+            </span>
+            <div class="col col-md-11 ml-3 text-dark text-custom">
+                {% for comment in review.comments.all %}
+                <hr>
+                    <h6><strong>{{ comment.user }}</strong></h6>
+                    {{ comment.description }}
+                    <br>
+                    <span>
+                        <small>{{ comment.created_at }}</small>
+                    </span>
+                {% endfor %}
+                <div class="card mt-2 reply-review" id="reply-review-{{review.id}}">
+                    <div class="card-body">
+                        <form action="{% url 'book:comment' review.id %}" method="post">
+                        {% csrf_token %}
+                        {{ replyForm.description}}
+                        <input
+                            type="hidden"
+                            name="current"
+                            value="{{request.get_full_path}}"
+                        >
+                        <button type="submit" class="btn btn-warning mt-2">Comment</button>
+                     </form>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+        <div class="comment">
+            <div class="card">
+                <div class="card-body">
+                     <form action="{% url 'book:review' book.id %}" method="post">
+                        {% csrf_token %}
+                         {{ form|crispy}}
+                         <button type="submit" class="btn btn-info">Review</button>
+                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

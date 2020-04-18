@@ -19,11 +19,14 @@
 	<link rel="stylesheet" href="{% static 'home/style.css' %}">
 </head>
 <body>
-    {% block app%}
-	{% endblock%}
-    <!-- JS Files -->
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<div class="container-fluid">
+		{% block app%}
+		{% endblock%}
+		<!-- JS Files -->
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="{% static 'home/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'home/custom.js' %}"></script>
 
 </body>
 </html>

@@ -5,22 +5,37 @@
     <div class="col col-md-11 mt-5 ml-5">
         <div class="card">
             <div class="card-body">
-                 <h1>Educated A Memoir</h1>
+                 <h1>{{ book.title }}</h1>
                 <div class="row mt-5">
                     <div class="col col-md-4">
-                        <img class="card-img-top img-thumbnail" src="/static/home/images/uploads/2020/04/book_3.png" alt="Card image">
+                        <img class="card-img-top img-thumbnail" src="/{{ book.image }}" alt="Card image">
                     </div>
-                    <div class="col col-md-4 mt-2 ml-4">
+                    <div class="col col-md-7 mt-2 ml-4">
                         <a href="{% url 'book:category' book.category.id %}">
                             <p> Category: {{ book.category.title }}</p>
                         </a>
                         <p> Authors: {{ book.author }}</p>
                         <p> Pages: {{ book.pages }}</p>
                         <p> Publish Date: {{ book.publish_date|date:'Y-m-d' }}</p>
-
+                        <p><i>{{ book.description }}</i></p>
+                        <span>
+                            <button type="button" class="btn btn-outline-info">
+                                <i class="fas fa-book"></i>
+                                Reading
+                            </button>
+                            <button type="button" class="btn btn-outline-success">
+                                <i class="fas fa-check"></i>
+                                Read
+                            </button>
+                            <button type="button" class="btn btn-outline-danger">
+                                <i class="fas fa-heart"></i>
+                                Love
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
+        {% include 'home/books/review-book.html' %}
     </div>
 {% endblock %}

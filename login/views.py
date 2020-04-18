@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from .forms import LoginForm
+from django.contrib.auth.views import LogoutView
 
 
 # Create your views here.
@@ -20,10 +21,14 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            print(request.POST)
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:
                 return redirect('/')
 
         return HttpResponse('Sai doiiiiiiiiiiii')
+
+
+class LogoutView(LogoutView):
+    template_name = 'login/login.html'
+    extra_context = {'form': LoginForm()}
