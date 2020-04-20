@@ -37,9 +37,9 @@ class Comment(models.Model):
 
 
 class Mark(models.Model):
-    choice_status = ((0, 'Unread'), (1, 'Read'), (2, 'Reading'))
+    choice_status = ((0, 'Unread'), (1, 'Reading'), (2, 'Read'))
     status = models.IntegerField(choices=choice_status, default=0)
     choice_favorite = ((0, 'Normal'), (1, 'Favorite'))
     favorite = models.IntegerField(choices=choice_favorite, default=0)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='marks')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

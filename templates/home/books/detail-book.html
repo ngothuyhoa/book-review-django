@@ -18,20 +18,111 @@
                         <p> Pages: {{ book.pages }}</p>
                         <p> Publish Date: {{ book.publish_date|date:'Y-m-d' }}</p>
                         <p><i>{{ book.description }}</i></p>
-                        <span>
-                            <button type="button" class="btn btn-outline-info">
-                                <i class="fas fa-book"></i>
-                                Reading
-                            </button>
-                            <button type="button" class="btn btn-outline-success">
-                                <i class="fas fa-check"></i>
-                                Read
-                            </button>
-                            <button type="button" class="btn btn-outline-danger">
-                                <i class="fas fa-heart"></i>
-                                Love
-                            </button>
-                        </span>
+                        <div class="row">
+                            {% if mark.id == 0 or mark.status == 0 %}
+                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                                {% csrf_token %}
+                                <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                >
+                                <input
+                                    type="hidden"
+                                    name="reading"
+                                    value="{{ book.id }}"
+                                >
+                                <button type="submit" class="btn btn-outline-info">
+                                    <i class="fas fa-book"></i>
+                                    Reading
+                                </button>
+                            </form>
+                            <form  action="{% url 'book:mark-book' mark.id %}" method="post">
+                                 {% csrf_token %}
+                                <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                >
+                                <input
+                                    type="hidden"
+                                    name="read"
+                                    value="{{ book.id }}"
+                                >
+                                <button type="submit" class="btn btn-outline-success">
+                                    <i class="fas fa-check"></i>
+                                    Read
+                                </button>
+                             </form>
+                            {% elif mark.status == 1 %}
+                             <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                                 {% csrf_token %}
+                                 <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                 >
+                                  <input
+                                    type="hidden"
+                                    name="read"
+                                 >
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-book"></i>
+                                    Reading
+                                </button>
+                             </form>
+                            {% elif mark.status == 2 %}
+                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                                 {% csrf_token %}
+                                <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                 >
+                                 <input
+                                    type="hidden"
+                                    name="unread"
+                                 >
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i>
+                                    Read
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            {% if mark.id == 0 or mark.favorite == 0 %}
+                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                                {% csrf_token %}
+                                <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                >
+                                <input
+                                    type="hidden"
+                                    name="favorite"
+                                    value="{{ book.id }}"
+                                >
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-heart"></i>
+                                    Love
+                                </button>
+                            </form>
+                            {% else %}
+                             <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                                {% csrf_token %}
+                                <input
+                                    type="hidden"
+                                    name="current"
+                                    value="{{request.get_full_path}}"
+                                >
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-heart"></i>
+                                    Love
+                                </button>
+                             </form>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
