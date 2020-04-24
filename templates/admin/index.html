@@ -1,0 +1,130 @@
+{% extends "admin/adminlte_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static " admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="row ml-1">
+        <div class="col-md-8 mt-2">
+            {% if app_list %}
+            {% for app in app_list %}
+            <div class="card card-info">
+                <!-- /.card-header -->
+                <div class="card-header">
+                    <h3 class="card-title">
+                        {{app.name }}
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 30%">Name</th>
+                            <th style="width: 30%">Add</th>
+                            <th style="width: 30%">Edit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for model in app.models %}
+                        <tr>
+                            {% if model.admin_url %}
+                            <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+                            {% else %}
+                            <th scope="row">{{ model.name }}</th>
+                            {% endif %}
+
+                            {% if model.add_url %}
+                            <td>
+                                <a href="{{ model.add_url }}" class=" btn btn-outline-success btn-sm">
+                                    <i class="fas fa-plus"></i>
+                                    {% trans 'Add' %}
+                                </a>
+                            </td>
+                            {% else %}
+                            <td>&nbsp;</td>
+                            {% endif %}
+
+                            {% if model.admin_url %}
+                            {% if model.view_only %}
+                            <td>
+                                <a href="{{ model.admin_url }}" class=" btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                    {% trans 'View' %}
+                                </a>
+                            </td>
+                            {% else %}
+                            <td>
+                                <a href="{{ model.admin_url }}" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                    {% trans 'Edit' %}
+                                </a>
+                            </td>
+                            {% endif %}
+                            {% else %}
+                            <td>&nbsp;</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>{% trans 'You don’t have permission to view or edit anything.' %}</p>
+            {% endif %}
+        </div>
+        <div class="col-md-3 offset-md-1">
+            <div class="card card-outline card-info">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans 'My actions' %}</h3>
+                </div>
+                <!-- /.card-header -->
+                {% load log %}
+                {% get_admin_log 10 as admin_log for_user user %}
+                {% if not admin_log %}
+                <p>{% trans 'None available' %}</p>
+                {% else %}
+                <div class="card-body ml-4">
+                     {% for entry in admin_log %}
+                     {% if entry.content_type %}
+                        <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                    {% else %}
+                        <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                    {% endif %}
+                    <br>
+                    {% if entry.is_addition %}
+                        <i class="fa fa-plus text-success"></i>
+                    {% endif %}
+                    {% if entry.is_change %}
+                        <i class="fa fa-edit text-warning"></i>
+                    {% endif %}
+                    {% if entry.is_deletion %}
+                        <i class="fa fa-trash-alt"></i>
+                    {% endif %}
+
+                    {% if entry.is_deletion or not entry.get_admin_url %}
+                        <h5>{{ entry.object_repr }}</h5>
+                    {% else %}
+                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                    {% endif %}
+                    <br>
+                    {% endfor %}
+                </div>
+             {% endif %}
+            <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
