@@ -5,6 +5,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from .forms import LoginForm
 from django.contrib.auth.views import LogoutView
+from .forms import CustomUserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 
 
 # Create your views here.
@@ -19,6 +22,7 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
             if 'next' in request.POST:
@@ -32,3 +36,9 @@ class LoginView(View):
 class LogoutView(LogoutView):
     template_name = 'login/login.html'
     extra_context = {'form': LoginForm()}
+
+
+class RegisterView(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = '/login'
+    template_name = 'login/register.html'

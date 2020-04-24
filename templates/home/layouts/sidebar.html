@@ -1,0 +1,51 @@
+<div class="card" style="background: #e0cb8c">
+    <div class="card-body">
+        <ul class="list-group">
+            <h1 class="text-center text-white">Books</h1>
+            {% for book in book_random %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col col-md-3">
+                        <img class="img-custom" src="/{{book.image}}">
+                    </div>
+                    <div class="col col-md-8">
+                        <a href="{% url 'book:review' book.id %}"><h5>{{ book.title }}</h5></a>
+                        <small>{{ book.author }}</small>
+                        <br>
+                        <i class="fas fa-heart text-danger day"></i>
+                        <small>{{book.favorites.count}}</small>
+                        <i class="fas fa-comment text-info day"></i>
+                        <small>{{ book.reviews.count }}</small>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="card mt-5" style="background: #5a847c">
+    <div class="card-body">
+        <ul class="list-group">
+            <h1 class="text-center text-white">Users</h1>
+            {% for user_sys in user_random %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col col-md-3">
+                        {% if user_sys.avatar %}
+                            <img class="avatar-custom" src="/{{user_sys.avatar}}">
+                        {% else %}
+                            <img class="avatar-custom" src="/static/home/images/avatar.png">
+                        {% endif %}
+                    </div>
+
+                    <div class="col col-md-8">
+                        <a href="{% url 'user:profile-user' user_sys.id %}"><h5>{{ user_sys.username }}</h5></a>
+                        <small>{{ user_sys.email }}</small>
+                        <br>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

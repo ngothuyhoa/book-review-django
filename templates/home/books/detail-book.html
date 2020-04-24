@@ -90,8 +90,8 @@
                             </form>
                             {% endif %}
 
-                            {% if mark.id == 0 or mark.favorite == 0 %}
-                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                            {% if favorite is None %}
+                            <form action="{% url 'book:favorite-book' book.id %}" method="post">
                                 {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -101,7 +101,7 @@
                                 <input
                                     type="hidden"
                                     name="favorite"
-                                    value="{{ book.id }}"
+                                    value="favorite"
                                 >
                                 <button type="submit" class="btn btn-outline-danger">
                                     <i class="fas fa-heart"></i>
@@ -109,7 +109,7 @@
                                 </button>
                             </form>
                             {% else %}
-                             <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                             <form action="{% url 'book:favorite-book' favorite.id %}" method="post">
                                 {% csrf_token %}
                                 <input
                                     type="hidden"

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from user.models import User
 
 # Create your models here.
 class Category(models.Model):
@@ -39,7 +39,12 @@ class Comment(models.Model):
 class Mark(models.Model):
     choice_status = ((0, 'Unread'), (1, 'Reading'), (2, 'Read'))
     status = models.IntegerField(choices=choice_status, default=0)
-    choice_favorite = ((0, 'Normal'), (1, 'Favorite'))
-    favorite = models.IntegerField(choices=choice_favorite, default=0)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='marks')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_marks')
+
+
+class Favorite(models.Model):
+    choice_favorite = ((1, 'Favorite'),)
+    favorite = models.IntegerField(choices=choice_favorite, default=1)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='favorites')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='user_favorites')

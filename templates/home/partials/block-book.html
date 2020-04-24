@@ -1,14 +1,15 @@
 {% load static %}
-<div class="col col-md-3">
+<div class="col col-md-3 mt-2">
     <div class="card">
         <img class="card-img-top img-thumbnail" src=" /{{ book.image }} " alt="Card image" style="height: 250px">
         <div class="card-body">
-             <a href="{% url 'book:review' book.id %}"><h6 class="card-title">{{ book.title }}</h6></a>
+            <a href="{% url 'book:review' book.id %}"><h5 class="card-title">{{ book.title }}</h5></a>
+            <small>{{ book.author }}</small>
             <hr>
-            <small>{{ book.publish_date|date:'Y-m-d'}}</small>
-            | <i class="fas fa-heart"></i>
-            | <i class="fas fa-comment day"></i>
-            <small> 10</small>
+            <i class="fas fa-heart text-danger day"></i>
+            <small>{{ book.favorites.count }}</small>
+            <i class="fas fa-comment text-info day"></i>
+            <small>{{ book.reviews.count }}</small>
         </div>
     </div>
 </div>
