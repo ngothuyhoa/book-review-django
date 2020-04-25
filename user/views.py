@@ -1,8 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from base.views import BaseView
+from book.views import BaseView
 from book.models import Book
-from user.models import Follow, User
+from .models import Follow, User
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.views import LogoutView
+from .forms import CustomUserCreationForm
+from django.views.generic.edit import CreateView
+from django.views import View
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from .forms import LoginForm
 
 # Create your views here.
 class ProfileUserView(BaseView):
@@ -43,3 +51,37 @@ class FollowUserView(BaseView):
             follow.delete()
 
         return HttpResponseRedirect(request.POST['current'])
+
+
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        template_name = 'login/login.html'
+        content = {'form': form}
+        return render(request, template_name, content)
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        print(user.admin)
+
+        if user is not None and not user.admin:
+            login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('/')
+
+        return HttpResponse('You are not User of System')
+
+
+class LogoutView(LogoutView):
+    template_name = 'login/login.html'
+    extra_context = {'form': LoginForm()}
+
+
+class RegisterView(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = '/login'
+    template_name = 'login/register.html'

@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <h1>Login</h1>
                     <hr>
-                    <form action="{% url 'login:login' %}" method="post">
+                    <form action="{% url 'login' %}" method="post">
                         {% csrf_token %}
                         {{ form|crispy}}
                         <hr>

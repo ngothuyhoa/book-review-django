@@ -11,8 +11,8 @@
             {% endif %}
         </div>
         <div class="col col-md-3">
-            <h1>{{user_sys}}</h1>
-            {{user_sys.email}}
+            <h1>{{user_sys.username}}</h1>
+            {{user_sys}}
             <br>
             {% if user_sys == request.user %}
             {% elif is_follow %}
@@ -59,6 +59,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#menu2">Read</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#following">Following</a>
+        </li>
         {% endif %}
     </ul>
 
@@ -83,6 +86,40 @@
             <div class="row">
                 {% for book in read_books %}
                 {% include 'home/partials/block-book.html' %}
+                {% endfor %}
+            </div>
+        </div>
+        <div id="following" class="container tab-pane active"><br>
+            <div class="row">
+                {% for user in request.user.following.all %}
+                <div class="col-md-3 card p-2 ml-5">
+                    <div class="row">
+                        <div class="col col-md-3">
+                            {% if user.following.avatar %}
+                                <img class="avatar-custom" src="/{{user.following.avatar}}">
+                            {% else %}
+                                <img class="avatar-custom" src="/static/home/images/avatar.png">
+                            {% endif %}
+                        </div>
+
+                        <div class="col col-md-8">
+                            <a href="{% url 'user:profile-user' user.following.id %}">
+                                <h5>{{ user.following.username }}</h5>
+                            </a>
+                            <small>{{ user.following.email }}</small>
+                            <br>
+                            <form action="{% url 'user:follow-user' user.following.id %}" method="post">
+                                {% csrf_token %}
+                                <input
+                                        type="hidden"
+                                        name="current"
+                                        value="{{request.get_full_path}}"
+                                >
+                                <button type="submit" class="btn btn-success btn-sm">Following</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>

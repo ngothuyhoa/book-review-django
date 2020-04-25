@@ -1,16 +1,48 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, View
-from book.models import Book, Category, Review, Mark, Favorite
+from .models import Book, Category, Review, Mark, Favorite, Buy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
-from book.forms import ReviewForm, CommentForm
-from base.views import BaseView
+from .forms import ReviewForm, CommentForm, BuyForm
 import random
 from user.models import User
+from django.template import RequestContext, loader
 
 
 # Create your views here.
+class BaseView(LoginRequiredMixin, ListView):
+    login_url = '/login'
+    queryset = ''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        # random book
+        # use flat=True to return a QuerySet of single values instead of 1-tuples:
+        id_list = Book.objects.values_list('id', flat=True)
+        random_id_list = random.sample(list(id_list), min(len(id_list), 3))
+        context['book_random'] = Book.objects.filter(id__in=random_id_list)
+
+        #user random
+        id_user_list = list(User.objects.filter(admin=0).values_list('id', flat=True))
+        id_user_list.remove(self.request.user.id)
+        random_id_user_list = random.sample(id_user_list, min(len(id_user_list), 3))
+        context['user_random'] = User.objects.filter(id__in=random_id_user_list)
+        context['following_list'] = self.request.user.following.all()
+
+        return context
+
+
+class IndexView(BaseView):
+    template_name = "home/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['newBooks'] = Book.objects.all().order_by('-id')[:4]
+        context['books'] = Book.objects.all()[:4]
+        return context
+
+
 class BaseListBookView(BaseView):
     template_name = "home/books/list-book.html"
 
@@ -142,3 +174,39 @@ class FavoriteBook(DetailBookView):
             favorite.delete()
         return HttpResponseRedirect(request.POST['current'])
 
+class BuyBookView(BaseListBookView):
+    template_name = 'home/books/buy-book.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = get_object_or_404(Book, pk=self.kwargs['pk'])
+        context['book'] = book
+        buy = Buy.objects.filter(book=book, user=self.request.user, status=0).last()
+        if buy:
+            context['form'] = BuyForm(instance=buy)
+            context['can_update'] = True
+            context['buy'] = buy
+        else:
+            context['form'] = BuyForm()
+            context['can_update'] = False
+
+        return context
+
+    def post(self, request, pk):
+        if 'update' in request.POST:
+            buy = Buy.objects.get(pk=pk)
+            form = BuyForm(request.POST, book=buy.book, user=buy.user, instance=buy)
+        else:
+            book = get_object_or_404(Book, pk=pk)
+            form = BuyForm(request.POST, book=book, user=request.user)
+        if form.is_valid():
+            form.save()
+
+        return HttpResponseRedirect(request.path)
+
+
+def buyBook(request):
+    template = 'admin/buy-book.html'
+    buy = Buy.objects.filter(status=0)
+    context = {'buy': buy}
+    return render(request, template, context)

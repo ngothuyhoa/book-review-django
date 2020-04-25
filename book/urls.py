@@ -1,12 +1,14 @@
 from django.urls import path
-from .views import \
-    BookListView, \
-    SearchListView,\
-    CommentBook,\
-    BookListByCategoryView,\
-    ReviewBook,\
-    MarkBook, \
-    FavoriteBook
+from .views import (
+    BookListView,
+    SearchListView,
+    CommentBook,
+    BookListByCategoryView,
+    ReviewBook,
+    MarkBook,
+    FavoriteBook,
+    BuyBookView
+)
 from . import views
 
 app_name = 'book'
@@ -18,4 +20,5 @@ urlpatterns = [
     path('comment/<int:pk>', CommentBook.as_view(), name='comment'),
     path('mark/<int:pk>', MarkBook.as_view(), name='mark-book'),
     path('favorite/<int:pk>', FavoriteBook.as_view(), name='favorite-book'),
+    path('<int:pk>/buy', BuyBookView.as_view(), name='buy'),
 ]

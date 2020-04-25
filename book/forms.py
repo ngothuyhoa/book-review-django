@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, Comment
+from .models import Review, Comment, Buy
 
 
 class ReviewForm(forms.ModelForm):
@@ -45,3 +45,26 @@ class CommentForm(forms.ModelForm):
             })
         }
 
+
+class BuyForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.book = kwargs.pop('book', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        buy = super(BuyForm, self).save(commit=False)
+        buy.book = self.book
+        buy.user = self.user
+        buy.save()
+
+    class Meta:
+        model = Buy
+        fields = ['name', 'phone', 'address', 'note']
+        widgets = {
+            'note': forms.Textarea(
+            attrs={
+                'rows': '4',
+                'class': 'textarea form-control',
+            })
+        }

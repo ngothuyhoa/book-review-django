@@ -18,9 +18,9 @@
                         <p> Pages: {{ book.pages }}</p>
                         <p> Publish Date: {{ book.publish_date|date:'Y-m-d' }}</p>
                         <p><i>{{ book.description }}</i></p>
-                        <div class="row">
+                        <div class="row p-2">
                             {% if mark.id == 0 or mark.status == 0 %}
-                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                            <form class="mr-2" action="{% url 'book:mark-book' mark.id %}" method="post">
                                 {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -37,7 +37,7 @@
                                     Reading
                                 </button>
                             </form>
-                            <form  action="{% url 'book:mark-book' mark.id %}" method="post">
+                            <form class="mr-2" action="{% url 'book:mark-book' mark.id %}" method="post">
                                  {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -55,7 +55,7 @@
                                 </button>
                              </form>
                             {% elif mark.status == 1 %}
-                             <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                             <form class="mr-2" action="{% url 'book:mark-book' mark.id %}" method="post">
                                  {% csrf_token %}
                                  <input
                                     type="hidden"
@@ -72,7 +72,7 @@
                                 </button>
                              </form>
                             {% elif mark.status == 2 %}
-                            <form action="{% url 'book:mark-book' mark.id %}" method="post">
+                            <form class="mr-2" action="{% url 'book:mark-book' mark.id %}" method="post">
                                  {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -91,7 +91,7 @@
                             {% endif %}
 
                             {% if favorite is None %}
-                            <form action="{% url 'book:favorite-book' book.id %}" method="post">
+                            <form class="mr-2" action="{% url 'book:favorite-book' book.id %}" method="post">
                                 {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -109,7 +109,7 @@
                                 </button>
                             </form>
                             {% else %}
-                             <form action="{% url 'book:favorite-book' favorite.id %}" method="post">
+                             <form class="mr-2" action="{% url 'book:favorite-book' favorite.id %}" method="post">
                                 {% csrf_token %}
                                 <input
                                     type="hidden"
@@ -122,6 +122,11 @@
                                 </button>
                              </form>
                             {% endif %}
+                            <a href="{% url 'book:buy' book.id %}" class="btn btn-outline-warning">
+                                <i class="fas fa-store"></i>
+                                Buy
+                            </a>
+
                         </div>
                     </div>
                 </div>

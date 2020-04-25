@@ -48,3 +48,15 @@ class Favorite(models.Model):
     favorite = models.IntegerField(choices=choice_favorite, default=1)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='favorites')
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='user_favorites')
+
+
+class Buy(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='buys')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    address = models.CharField(max_length=200, default='')
+    note = models.TextField(default='')
+    choice_status = ((0, 'Default'), (1, 'Approve'), (2, 'Cancel'))
+    status = models.IntegerField(choices=choice_status, default=0)
+    reated_at = models.DateTimeField(auto_now_add=True)

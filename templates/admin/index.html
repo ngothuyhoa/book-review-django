@@ -109,11 +109,11 @@
                         <i class="fa fa-edit text-warning"></i>
                     {% endif %}
                     {% if entry.is_deletion %}
-                        <i class="fa fa-trash-alt"></i>
+                        <i class="fa fa-trash-alt text-danger"></i>
                     {% endif %}
 
                     {% if entry.is_deletion or not entry.get_admin_url %}
-                        <h5>{{ entry.object_repr }}</h5>
+                        {{ entry.object_repr }}
                     {% else %}
                         <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
                     {% endif %}
