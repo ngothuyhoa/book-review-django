@@ -3,11 +3,11 @@
 
 {% block content %}
 <div class="row justify-content-center">
-         {% include 'home/partials/block-book.html' %}
+    {% include 'home/partials/block-book.html' %}
     <div class="col-md-6">
         <div class="card mt-3">
         <div class="card-body">
-            {% if can_update %}
+            {% if history or can_update  %}
                 <form action="{% url 'book:buy' buy.id %}" method="post">
                     {% csrf_token %}
                     {{ form|crispy }}
@@ -16,7 +16,9 @@
                         name="update"
                         value="update"
                     >
-                    <button type="submit" class="btn btn-danger btn-block mt-2">Update Buy</button>
+                    {% if not history %}
+                        <button type="submit" class="btn btn-danger btn-block mt-2">Update Buy</button>
+                    {% endif%}
                  </form>
             {% else %}
                 <form action="{% url 'book:buy' book.id %}" method="post">

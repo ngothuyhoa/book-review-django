@@ -1,4 +1,5 @@
 {% extends 'home/layouts/app.html' %}
+{% load static %}
 
 {% block content %}
 <div class="col col-md-12 mt-5">
@@ -62,6 +63,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#following">Following</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#buy">Buy</a>
+        </li>
         {% endif %}
     </ul>
 
@@ -89,7 +93,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div id="following" class="container tab-pane active"><br>
+        <div id="following" class="container tab-pane"><br>
             <div class="row">
                 {% for user in request.user.following.all %}
                 <div class="col-md-3 card p-2 ml-5">
@@ -122,6 +126,15 @@
                 </div>
                 {% endfor %}
             </div>
+        </div>
+        <div id="buy" class="container tab-pane fade"><br>
+            {% if buys is not None %}
+            <div class="row">
+                {% for buy in buys %}
+                    {% include 'home/partials/block-book.html' with book=buy.book %}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         {% endif %}
     </div>

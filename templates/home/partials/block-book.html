@@ -10,6 +10,17 @@
             <small>{{ book.favorites.count }}</small>
             <i class="fas fa-comment text-info day"></i>
             <small>{{ book.reviews.count }}</small>
+            <br>
+
+            {% if buy %}
+                {% if buy.status == 1 %}
+                    <a href="{% url 'book:history' buy.id %}" class="btn btn-success btn-block btn-sm mt-2">Approve</a>
+                {% elif buy.status == 2 %}
+                    <a href="{% url 'book:history' buy.id %}" class="btn btn-danger btn-block btn-sm mt-2">Cancel</a>
+                {% else %}
+                    <a href="{% url 'book:history' buy.id %}" class="btn btn-info btn-block btn-sm mt-2">Demanding</a>
+                {% endif%}
+            {% endif %}
         </div>
     </div>
 </div>

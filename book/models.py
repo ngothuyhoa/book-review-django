@@ -52,7 +52,7 @@ class Favorite(models.Model):
 
 class Buy(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='buys')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_buys')
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     address = models.CharField(max_length=200, default='')

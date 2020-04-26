@@ -7,7 +7,8 @@ from .views import (
     ReviewBook,
     MarkBook,
     FavoriteBook,
-    BuyBookView
+    BuyBookView,
+    HistoryBuy
 )
 from . import views
 
@@ -21,4 +22,5 @@ urlpatterns = [
     path('mark/<int:pk>', MarkBook.as_view(), name='mark-book'),
     path('favorite/<int:pk>', FavoriteBook.as_view(), name='favorite-book'),
     path('<int:pk>/buy', BuyBookView.as_view(), name='buy'),
+    path('<int:pk>/history', HistoryBuy.as_view(), name='history'),
 ]

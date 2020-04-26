@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from .forms import LoginForm
+from book.models import Buy
 
 # Create your views here.
 class ProfileUserView(BaseView):
@@ -23,13 +24,17 @@ class ProfileUserView(BaseView):
         id_favorite_books = user.user_favorites.all().values_list('book', flat=True)
         id_reading_books = user.user_marks.all().filter(status=1).values_list('book', flat=True)
         id_read_books = user.user_marks.all().filter(status=2).values_list('book', flat=True)
+        id_buy_books = user.user_buys.all().values_list('book', flat=True)
 
         context['favorite_books'] = Book.objects.filter(id__in=id_favorite_books)
         context['reading_books'] = Book.objects.filter(id__in=id_reading_books)
         context['read_books'] = Book.objects.filter(id__in=id_read_books)
+        context['buy_books'] = Book.objects.filter(id__in=id_buy_books)
         context['user_sys'] = user
 
         follow = Follow.objects.filter(follower=self.request.user, following=user)
+        context['buys'] = Buy.objects.filter(user=self.request.user).all()
+
         if not follow:
             context['is_follow'] = False
         else:

@@ -20,10 +20,10 @@
     </div>
 
      <div class="col col-md-11 mt-5 ml-5">
-        <h1 class="text-center">All Books</h1>
+        <h1 class="text-center">Favorite Books</h1>
          <hr>
         <div class="row justify-content-center">
-            {% for book in books %}
+            {% for book in favorite_books %}
             {% include 'home/partials/block-book.html' %}
             {% endfor %}
         </div>

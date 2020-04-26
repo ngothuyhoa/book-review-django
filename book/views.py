@@ -8,6 +8,7 @@ from .forms import ReviewForm, CommentForm, BuyForm
 import random
 from user.models import User
 from django.template import RequestContext, loader
+from django.db.models import Count
 
 
 # Create your views here.
@@ -40,6 +41,8 @@ class IndexView(BaseView):
         context = super().get_context_data(**kwargs)
         context['newBooks'] = Book.objects.all().order_by('-id')[:4]
         context['books'] = Book.objects.all()[:4]
+        context['favorite_books'] = Book.objects.annotate(num_books=Count('favorites')).order_by('-num_books')[:4]
+
         return context
 
 
@@ -203,6 +206,24 @@ class BuyBookView(BaseListBookView):
             form.save()
 
         return HttpResponseRedirect(request.path)
+
+class HistoryBuy(BaseListBookView):
+    template_name = 'home/books/buy-book.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        buy = get_object_or_404(Buy, pk=self.kwargs['pk'])
+        book = get_object_or_404(Book, pk=buy.book.id)
+        context['book'] = book
+
+        if buy:
+            context['history'] = True
+            context['buy'] = buy
+            context['form'] = BuyForm(instance=buy)
+
+        return context
+
+
 
 
 def buyBook(request):
